@@ -14,9 +14,6 @@
     "autoload": {
         "psr-4": {
             "AbdelrahmanMedhat\\BlogsScraper\\": "package/BlogsScraper/src/"
-        },
-        "files": [
-            "src/functions_include.php"
-        ]
+        }
     }
 }
