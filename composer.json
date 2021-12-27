@@ -1,0 +1,22 @@
+{
+    "name": "abdelrahmanmedhat/blogsscraper",
+    "description": "This package will help you sync posts from popular blogs on the Internet.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdelrahman-Medhat",
+            "email": "abdelrahmanmedhay@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "AbdelrahmanMedhat\\BlogsScraper\\": "package/BlogsScraper/src/"
+        },
+        "files": [
+            "src/functions_include.php"
+        ]
+    }
+}
