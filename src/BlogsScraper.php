@@ -22,6 +22,7 @@ class BlogsScraper
     }
 
     public function scrape($websiteName, $tag, $pages){
+        ini_set('max_execution_time', 1000);
         $this->websiteName =  $websiteName;
         $this->tag =  $tag;
         $this->pages =  $pages;
