@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('author_id');
             $table->unsignedBigInteger('blog_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('title');
             $table->longText('slug');
             $table->longText('excerpt');
@@ -27,9 +28,11 @@ class CreatePostsTable extends Migration
 
             $table->index('author_id');
             $table->index('blog_id');
+            $table->index('category_id');
             $table->index('slug');
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
             $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
