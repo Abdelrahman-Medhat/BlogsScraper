@@ -48,7 +48,7 @@ class scitechdailyParser
         $GLOBALS['postTags'] = [];
 
         $post->filter('.tags a')->each(function ($tagsNodes) {
-            $GLOBALS['postTags'] []= $tagsNodes ;
+            $GLOBALS['postTags'] []= $tagsNodes->text() ;
         });
 
         return $GLOBALS['postTags'];
