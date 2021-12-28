@@ -12,7 +12,7 @@ class {@{Parser_Name}@}
 
     public static $websiteQuery = '';
 
-    public function posts($postsContainer = null){
+    public function posts($html){
         return '';
     }
 

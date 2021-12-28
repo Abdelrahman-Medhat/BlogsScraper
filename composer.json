@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "fabpot/goutte": "^4.0",
         "symfony/dom-crawler": "^6.0",
         "weidner/goutte": "^2.1"
     },
