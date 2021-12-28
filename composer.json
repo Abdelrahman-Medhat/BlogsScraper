@@ -10,7 +10,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "symfony/dom-crawler": "^6.0",
+        "weidner/goutte": "^2.1"
+    },
     "autoload": {
         "psr-4": {
             "AbdelrahmanMedhat\\BlogsScraper\\": "src/"
