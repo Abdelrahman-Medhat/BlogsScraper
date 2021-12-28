@@ -271,7 +271,7 @@ to img tag to browser can load it .
     use AbdelrahmanMedhat\BlogsScraper\Models\Post;
 
     $posts = Post::with(['category','blog','author','tags'])
-    ->simplePaginate(15);
+    ->simplePaginate(15)->toArray();
 ```
 ­
 ---
@@ -283,7 +283,7 @@ to img tag to browser can load it .
     use AbdelrahmanMedhat\BlogsScraper\Models\Blog;
 
     $blogs = Blog::with(['posts'])
-    ->simplePaginate(15);
+    ->simplePaginate(15)->toArray();
 ```
 ­
 ---
@@ -294,7 +294,7 @@ to img tag to browser can load it .
     use AbdelrahmanMedhat\BlogsScraper\Models\Author;
 
     $authors = Author::with(['posts'])
-    ->simplePaginate(15);
+    ->simplePaginate(15)->toArray();
 ```
 ­
 ---
@@ -305,7 +305,7 @@ to img tag to browser can load it .
     use AbdelrahmanMedhat\BlogsScraper\Models\Category;
 
     $categories = Category::with(['posts'])
-    ->simplePaginate(15);
+    ->simplePaginate(15)->toArray();
 ```
 ­
 ---
@@ -317,7 +317,7 @@ to img tag to browser can load it .
     use AbdelrahmanMedhat\BlogsScraper\Models\Tag;
 
     $tags = Tag::with(['posts'])
-    ->simplePaginate(15);
+    ->simplePaginate(15)->toArray();
 ```
 ­
 ---
