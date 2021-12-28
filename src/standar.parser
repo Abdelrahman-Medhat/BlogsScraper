@@ -47,6 +47,6 @@ class {@{Parser_Name}@}
     public function postTags($post){
         return '';
     }
-    
+
 }
 
