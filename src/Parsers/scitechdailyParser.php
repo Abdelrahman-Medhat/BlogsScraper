@@ -39,14 +39,8 @@ class scitechdailyParser
         return $node->filter('.post-thumbnail amp-img')->attr('src');
     }
 
-    public function postCategories($node){
-        $categoriesTags = [];
-
-        $node->filter('.post-categories li a')->each(function ($categoriesNode) {
-            $postCategories []= $categoriesNode->text() ;
-        });
-
-        return $categoriesTags;
+    public function postCategory($node){
+        return $node->filter('.post-categories li a')->text();
     }
 
     public function postExcerpt($node){

@@ -10,8 +10,10 @@ use Goutte;
 
 class BlogsScraper
 {   
-    public $scraped_posts = [];
     public $blog; 
+    public $websiteName; 
+    public $tag; 
+    public $page = 0; 
     public $post_index = 0; 
 
     public  function createSlug($title){
@@ -20,6 +22,10 @@ class BlogsScraper
     }
 
     public function scrape($websiteName, $tag, $page){
+        $this->websiteName =  $websiteName;
+        $this->tag =  $tag;
+        $this->page =  $page;
+
         $websiteClass = $websiteName.'Parser';
         $className ='App\Parsers\\'.$websiteClass;
         $this->blog =  new $className();
@@ -27,28 +33,13 @@ class BlogsScraper
         $this->blog->posts(Goutte::request('GET', 
             str_replace('{{page}}',$page,str_replace('{{tag}}',$tag,$this->blog::$websiteQuery))
         ))->each(function ($node) {
-            
+
             $post = Post::where([
                 'slug' => $this->createSlug($this->blog->postTitle($node))
             ])->first();
 
             if(empty($post)){
-                $blog = Blog::where('slug' , $this->createSlug($websiteName))->first();
-                if(empty($blog)){
-                    $blog = new Blog;
-                    $blog->name = $websiteName;
-                    $blog->slug = $this->createSlug($websiteName);
-                    $blog->domain = $this->blog::$websiteUrl;
-                    $blog->save();
-                }
-    
-                $author = Author::where('slug' , $this->createSlug($this->blog->postAuthorSelector($getPost)))->first();
-                if(empty($author)){
-                    $author = new Author;
-                    $author->name = $this->blog->postAuthorSelector($getPost);
-                    $author->slug = $this->createSlug($this->blog->postAuthorSelector($getPost));
-                    $author->save();
-                }
+
     
                 $category = Category::where('slug' , $this->createSlug($this->blog->postCategory($node)))->first();
                 if(empty($category)){
@@ -57,15 +48,34 @@ class BlogsScraper
                     $category->slug = $this->createSlug($this->blog->postCategory($node));
                     $category->save();
                 }
-    
+
+                $getPost = Goutte::request('GET', $this->blog->postLink($node));
+                
+                $blog = Blog::where('slug' , $this->createSlug($this->websiteName))->first();
+                if(empty($blog)){
+                    $blog = new Blog;
+                    $blog->name = $this->websiteName;
+                    $blog->slug = $this->createSlug($this->websiteName);
+                    $blog->domain = $this->blog::$websiteUrl;
+                    $blog->save();
+                }
+                
+                $author = Author::where('slug' , $this->createSlug($this->blog->postAuthorSelector($getPost)))->first();
+                if(empty($author)){
+                    $author = new Author;
+                    $author->name = $this->blog->postAuthorSelector($getPost);
+                    $author->slug = $this->createSlug($this->blog->postAuthorSelector($getPost));
+                    $author->save();
+                }
+
                 $tags = $this->blog->postTagsSelector($getPost);
                 $tags_ids = [];
                 foreach($tags as $nodeTag){
-                    $tag = Tag::where('slug' , $this->createSlug($nodeTag['slug']))->first();
+                    $tag = Tag::where('slug' , $this->createSlug($nodeTag))->first();
                     if(empty($tag)){
                         $tag = new Tag;
-                        $tag->name = $nodeTag['name'];
-                        $tag->slug = $this->createSlug($nodeTag['slug']);
+                        $tag->name = $nodeTag;
+                        $tag->slug = $this->createSlug($nodeTag);
                         $tag->save();
                     }
                     $tags_ids []= $tag->id;
@@ -88,12 +98,10 @@ class BlogsScraper
             }
             $this->post_index++;
         });
-        
-        return $this->scraped_posts;
     }
 
     public function sync($websiteName){
-        return $this->scrape($websiteName, 'biology', 2);
+        $this->scrape($websiteName, 'biology', 2);
     }
 
 }
