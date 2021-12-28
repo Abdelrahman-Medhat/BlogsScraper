@@ -229,8 +229,8 @@ to img tag to browser can load it .
 ```
 | ***Notice*** | =>  you can use below method to loop on all element : `<a>` inside element have class : `.tags`  like what we do on above function
 ```
-    ->each(function ($tagsNodes) {
-        // use $tagsNodes here
+    $nodes->each(function ($node) {
+        // use $node here
     });
 ``` 
 
@@ -240,13 +240,88 @@ to img tag to browser can load it .
 ---
 ­
 
-## Database Relationships
+­
 
-#### Get all items
+## Scraping
+
+#### Sync all posts from specific blog.
 
 ```php
+    use AbdelrahmanMedhat\BlogsScraper\BlogsScraper;
+
+    $blog_name = 'scitechdaily';
+    $tag_name = 'technology';
+    $pages = [1,2,3];
+
+    $BlogsScraper =  new BlogsScraper;
+    $BlogsScraper->sync($blog_name,$tag_name,$pages);
 
 ```
+­| ***Notice*** | =>  you also can use this script to corn job on server With a specific schedule.
 
-Takes two numbers and returns the sum.
+---
+­
+
+
+## Database Relationships
+
+#### Get all posts with relationships.
+
+```php
+    use AbdelrahmanMedhat\BlogsScraper\Models\Post
+
+    $posts = Post::with(['category','blog','author','tags'])
+    ->simplePaginate(15);
+```
+­
+---
+­
+
+#### Get all blogs with relationships.
+
+```php
+    use AbdelrahmanMedhat\BlogsScraper\Models\Blog
+
+    $blogs = Blog::with(['posts'])
+    ->simplePaginate(15);
+```
+­
+---
+­
+
+#### Get all authors with relationships.
+```php
+    use AbdelrahmanMedhat\BlogsScraper\Models\Author
+
+    $authors = Author::with(['posts'])
+    ->simplePaginate(15);
+```
+­
+---
+­
+
+#### Get all categories with relationships.
+```php
+    use AbdelrahmanMedhat\BlogsScraper\Models\Category
+
+    $categories = Category::with(['posts'])
+    ->simplePaginate(15);
+```
+­
+---
+­
+
+#### Get all tags with relationships.
+
+```php
+    use AbdelrahmanMedhat\BlogsScraper\Models\Tag
+
+    $tags = Tag::with(['posts'])
+    ->simplePaginate(15);
+```
+­
+---
+­
+
+
 
