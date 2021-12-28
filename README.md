@@ -63,11 +63,190 @@ php artisan create:parser blog-name
 
 
 #### **3) Parser architecture**
-• Go to this path `app/Parsers` .
+• Go to this path : `app/Parsers` .
 
-• Copy this command and paste it on terminal.
+• Open this parser `scitechdailyParser.php` .
 
-• Replace `blog-name` with blog name you will scrape data from it.
-```bash
-php artisan create:parser blog-name
+**In this variable you need define blog name.**
+```php
+public static $websiteName = 'SciTechDaily';
 ```
+­
+
+---
+­
+
+**In this variable you need define home blog url.**
+```php
+public static $websiteUrl = 'https://scitechdaily.com';
+```
+­
+
+---
+­
+
+**In this variable you need define blog logo.**
+```php
+public static $websiteLogo = 'https://scitechdaily.com/images/cropped-scitechdaily-amp60.png';
+```
+
+---
+­
+
+
+**In bellow variable you need define blog query that we will scrape data from it**
+
+**And you need to put : `{{tag}}` instead of tag name and put : `{{page}}` instead of page number.** 
+
+**Before : `https://scitechdaily.com/news/technology/amp/page/2/`** 
+
+**After : `https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/`** 
+
+```php
+    public static $websiteQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
+```
+­
+
+---
+­
+
+**In this function you need to define all posts html nodes from class of post html div .**
+```php
+    public function posts($html){
+        return $html->filter('.listing-item');
+    }
+```
+| ***Notice*** | =>  `$html` this will return html of posts page.
+
+| ***Notice*** | =>  you can use `->filter('selector here')` to extract another nodes or text or ...etc from `$html` or from `$node`.
+­
+
+---
+­
+
+**In this function you need to define post link .**
+```php
+    public function postLink($node){
+        return $node->filter('.post-title a')->attr('href');
+    }
+```
+
+| ***Notice*** | =>  `$node` this will return html of post node in posts page.
+
+| ***Notice*** | =>  you can use `->attr('attribute here')` to get value from attribute like we do above on href.
+­
+
+---
+­
+
+**In this function you need to define post excerpt .**
+```php
+    public function postExcerpt($node){
+        return $node->filter('.post-excerpt p')->text();
+    }
+```
+
+| ***Notice*** | =>  you can use `->text()` to get text from html element like we do above.
+­
+
+---
+­
+
+**In this function you need to define post title .**
+```php
+    public function postTitle($node){
+        return $node->filter('.post-title a')->text();
+    }
+```
+­
+
+---
+­
+
+**In this function you need to define post image .**
+```php
+    public function postImage($node){
+        return $node->filter('.post-thumbnail amp-img')->attr('src');
+    }
+```
+­
+
+---
+­
+
+**In this function you need to define post category .**
+```php
+    public function postCategory($node){
+        return $node->filter('.post-categories li a')->text();
+    }
+```
+­
+
+---
+­
+
+**In this function you need to define post author .**
+```php
+    public function postAuthor($post){
+        return $post->filter('.post-author')->text();
+    }
+```
+| ***Notice*** | =>  `$post` this will return html of post inner page.
+­
+
+---
+­
+
+**In this function you need to define post content .**
+
+we replace any `amp-img` with `img` in post content because website we scrape from it ,
+replace img tag with amp-img and if we use it with amp-img the image will not load on your website we need to change it 
+to img tag to browser can load it .
+
+```php
+    public function postContent($post){
+        return str_replace('amp-img', 'img', $post->filter('.post-content')->html());
+    }
+
+```
+| ***Notice*** | =>  you can use `->html()` to get html value of node.
+­
+
+---
+­
+
+**In this function you need to define post tags .**
+```php
+    public function postTags($post){
+        $GLOBALS['postTags'] = [];
+
+        $post->filter('.tags a')->each(function ($tagsNodes) {
+            $GLOBALS['postTags'] []= $tagsNodes->text() ;
+        });
+
+        return $GLOBALS['postTags'];
+    }
+```
+| ***Notice*** | =>  you can use below method to loop on all element : `<a>` inside element have class : `.tags`  like what we do on above function
+```
+    ->each(function ($tagsNodes) {
+        // use $tagsNodes here
+    });
+``` 
+
+­| ***Notice*** | =>  you need return all tags in array.
+
+
+---
+­
+
+## Database Relationships
+
+#### Get all items
+
+```php
+
+```
+
+Takes two numbers and returns the sum.
+
