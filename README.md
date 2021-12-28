@@ -9,7 +9,7 @@ This package will help you sync posts from popular blogs on the Internet.
 - [Abdelrahman Medhat](https://github.com/Abdelrahman-Medhat)
 
 
-## Installation
+## 1 ) Installation
 
 #### **1) Install package**
 
@@ -40,7 +40,7 @@ Run bellow command in terminal for base path of project
 ```bash
 php artisan migrate
 ``` 
-## Parser
+## 2 ) Parser
 
 
 #### **1) Parsers folder**
@@ -242,7 +242,7 @@ to img tag to browser can load it .
 
 ­
 
-## Scraping
+## 3 ) Scraping
 
 #### Sync all posts from specific blog.
 
@@ -263,7 +263,7 @@ to img tag to browser can load it .
 ­
 
 
-## Database Relationships
+## 4 ) Database Relationships
 
 #### Get all posts with relationships.
 
