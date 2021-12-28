@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Parsers;
+
+class {@{Parser_Name}@} 
+{   
+    public static $websiteName = '';
+
+    public static $websiteUrl = '';
+
+    public static $websiteLogo = '';
+
+    public static $websiteQuery = '';
+
+    public function posts($postsContainer = null){
+        return '';
+    }
+
+    public function postLink($node){
+        return '';
+    }
+
+    public function postTitle($node){
+        return '';
+    }
+    
+    public function postImage($node){
+        return '';
+    }
+
+    public function postCategory($node){
+        return '';
+    }
+
+    public function postExcerpt($node){
+        return '';
+    }
+
+    public function postAuthor($post){
+        return '';
+    }
+
+    public function postContent($post){
+        return '';
+    }
+
+    public function postTags($post){
+        return '';
+    }
+    
+}
+
