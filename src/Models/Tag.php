@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace AbdelrahmanMedhat\BlogsScraper\Models;
+
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,4 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class,'posts_tags','tag_id','post_id');
+    }
 }

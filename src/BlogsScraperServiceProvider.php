@@ -13,7 +13,8 @@ class BlogsScraperServiceProvider extends ServiceProvider
             'blogsscraper'
         );
         $this->publishes([
-            __DIR__.'/Parsers' => app_path('Parsers')
+            __DIR__.'/Parsers' => app_path('Parsers'),
+            __DIR__.'/Console' => app_path('Console'),
         ]);
     }
 

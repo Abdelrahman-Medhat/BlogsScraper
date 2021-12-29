@@ -1,12 +1,19 @@
 <?php
 
 namespace AbdelrahmanMedhat\BlogsScraper;
+use AbdelrahmanMedhat\BlogsScraper\Models\Post;
+use AbdelrahmanMedhat\BlogsScraper\Models\Category;
+use AbdelrahmanMedhat\BlogsScraper\Models\Author;
+use AbdelrahmanMedhat\BlogsScraper\Models\Blog;
+use AbdelrahmanMedhat\BlogsScraper\Models\Tag;
 use Goutte;
 
 class BlogsScraper
 {   
-    public $scraped_posts = [];
     public $blog; 
+    public $websiteName; 
+    public $tag; 
+    public $pages = 0; 
     public $post_index = 0; 
 
     public  function createSlug($title){
@@ -14,55 +21,90 @@ class BlogsScraper
         return $slug;
     }
 
-    public function scrape($websiteName, $tag, $page){
+    public function scrape($websiteName, $tag, $pages){
+        ini_set('max_execution_time', 1000);
+        $this->websiteName =  $websiteName;
+        $this->tag =  $tag;
+        $this->pages =  $pages;
 
-        $websiteClass = $websiteName;
-        $className ='App\Parsers\\'.$websiteClass.'Parser';
+        $websiteClass = $websiteName.'Parser';
+        $className ='App\Parsers\\'.$websiteClass;
         $this->blog =  new $className();
         
-        $this->blog->posts(Goutte::request('GET', 
-            str_replace('{{page}}',$page,str_replace('{{tag}}',$tag,$this->blog::$websiteQuery))
-        ))->each(function ($node) {
-            
-            // Get Post link
-            $this->scraped_posts[$this->post_index] ['link']= $this->blog->postLink($node);
+        foreach($pages as $page){
+            $this->blog->posts(Goutte::request('GET', 
+                str_replace('{{page}}',$page,str_replace('{{tag}}',$tag,$this->blog::$websiteQuery))
+            ))->each(function ($node) {
 
-            // Get Post Title
-            $this->scraped_posts[$this->post_index] ['title']= $this->blog->postTitle($node);
+                $post = Post::where([
+                    'slug' => $this->createSlug($this->blog->postTitle($node))
+                ])->first();
 
-            // Get Post Slug
-            $this->scraped_posts[$this->post_index] ['slug']= $this->createSlug($this->blog->postTitle($node));
+                if(empty($post)){
 
-            // Get Image
-            $this->scraped_posts[$this->post_index] ['image']= $this->blog->postImage($node);
-            
-            // Get Post Categories
-            $this->scraped_posts[$this->post_index]['categories'] = $this->blog->postCategories($node) ;
+                    $getPost = Goutte::request('GET', $this->blog->postLink($node));
 
-            // Get Post Excerpt
-            $this->scraped_posts[$this->post_index] ['excerpt']= $this->blog->postExcerpt($node);
+                    $category = Category::where('slug' , $this->createSlug($this->blog->postCategory($node)))->first();
+                    if(empty($category)){
+                        $category = new Category;
+                        $category->name = $this->blog->postCategory($node);
+                        $category->slug = $this->createSlug($this->blog->postCategory($node));
+                        $category->save();
+                    }
 
-            
-            // Get post
-            $post = Goutte::request('GET', $this->blog->postLink($node));
+                    $blog = Blog::where('slug' , $this->createSlug($this->websiteName))->first();
+                    if(empty($blog)){
+                        $blog = new Blog;
+                        $blog->name = $this->websiteName;
+                        $blog->slug = $this->createSlug($this->websiteName);
+                        $blog->domain = $this->blog::$websiteUrl;
+                        $blog->save();
+                    }
+                    
+                    $author = Author::where('slug' , $this->createSlug($this->blog->postAuthor($getPost)))->first();
+                    if(empty($author)){
+                        $author = new Author;
+                        $author->name = $this->blog->postAuthor($getPost);
+                        $author->slug = $this->createSlug($this->blog->postAuthor($getPost));
+                        $author->save();
+                    }
 
-            // Get post author
-            $this->scraped_posts[$this->post_index] ['author']= $this->blog->postAuthorSelector($post);
-            
-            // Get post content
-            $this->scraped_posts[$this->post_index] ['content']= $this->blog->postContentSelector($post);
+                    $tags = $this->blog->postTags($getPost);
+                    $tags_ids = [];
+                    foreach($tags as $nodeTag){
+                        $tag = Tag::where('slug' , $this->createSlug($nodeTag))->first();
+                        if(empty($tag)){
+                            $tag = new Tag;
+                            $tag->name = $nodeTag;
+                            $tag->slug = $this->createSlug($nodeTag);
+                            $tag->save();
+                        }
+                        $tags_ids []= $tag->id;
+                    }
+                    
+                    $post = Post::create([
+                        'author_id' => $author->id,
+                        'blog_id' => $blog->id,
+                        'category_id' => $category->id,
+                        'title' => $this->blog->postTitle($node),
+                        'slug' => $this->createSlug($this->blog->postTitle($node)),
+                        'excerpt' => $this->blog->postExcerpt($node),
+                        'content' => $this->blog->postContent($getPost),
+                        'image' => $this->blog->postImage($node),
+                        'url' => $this->blog->postLink($node)
+                    ]);
+                    
+                    $post = Post::findOrFail($post->id);
+                    $post->tags()->attach($tags_ids);
+                }
+                $this->post_index++;
+            });
 
-            // Get post tags
-            $this->scraped_posts[$this->post_index]['tags'] = $this->blog->postTagsSelector($post);
-            
-
-            $this->post_index++;
-        });
-        
-        return $this->scraped_posts;
+        }
     }
 
-    public function sync($websiteName){
-        return $this->scrape($websiteName, 'biology', 2);
+    public function sync($websiteName,$tag, $pages){
+        $this->scrape($websiteName, $tag, $pages);
     }
+
 }
