@@ -12,7 +12,7 @@ class scitechdailyParser
 
     public static $websiteQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
 
-    public function posts($html = null){
+    public function posts($html){
         return $html->filter('.listing-item');
     }
 
