@@ -52,7 +52,7 @@ class BlogsScraper
                     
                     $data = [
                         'title' => $this->blog->postTitle($node),
-                        'content' => $this->blog->postContent($getPost),
+                        'content' => $this->blog->postContent($postPage),
                         'image' => $this->blog->postImage($node),
                         'url' => $this->blog->postLink($node)
                     ];

@@ -33,17 +33,24 @@ class scitechdailyParser
     }
 
     public function postAuthor($post){
-        return $post->filter('.post-author')->text();
+        $postAuthor = $post->filter('.author');
+        $postAuthor = empty($postAuthor) ? $post->filter('.post-author') : $postAuthor;
+        return $postAuthor->text();
     }
-
+    
     public function postContent($post){
-        return str_replace('amp-img', 'img', $post->filter('.post-content')->html());
+        $article = $post->filter('article');
+        $article = empty($article) ? $post->filter('.post-content') : $article;
+        return str_replace('amp-img', 'img', $article->html());
     }
 
     public function postTags($post){
         $GLOBALS['postTags'] = [];
+        
+        $tags = $post->filter('.tags a');
+        $tags = empty($tags) ? $tags->filter('.tagcloud') : $tags;
 
-        $post->filter('.tags a')->each(function ($tagsNodes) {
+        $tags->each(function ($tagsNodes) {
             $GLOBALS['postTags'] []= $tagsNodes->text() ;
         });
 

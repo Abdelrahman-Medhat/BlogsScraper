@@ -10,9 +10,9 @@ use AbdelrahmanMedhat\BlogsScraper\Models\Tag;
 use Goutte;
 
 trait Helpers{
-    public $author;
-    public $blog;
-    public $category; 
+    public $author_id;
+    public $blog_id;
+    public $category_id; 
     public $tags_ids;
 
 
@@ -31,35 +31,35 @@ trait Helpers{
     public function insertCategoryIfNotExist($categoryName){
         $category = Category::where('slug' , $this->createSlug($categoryName))->first();
         if(empty($category)){
-            $category = new Category;
-            $category->name = $categoryName;
-            $category->slug = $this->createSlug($categoryName);
-            $category->save();
-            $this->category = $category;
+            $category = Category::create([
+                "name" => $categoryName,
+                "slug" => $this->createSlug($categoryName)
+            ]);
         }
+        $this->category_id = $category->id;
     }
 
     public function insertBlogIfNotExist($BlogName){
         $blog = Blog::where('slug' , $this->createSlug($this->blogName))->first();
         if(empty($blog)){
-            $blog = new Blog;
-            $blog->name = $this->blogName;
-            $blog->slug = $this->createSlug($this->blogName);
-            $blog->domain = $this->blog::$blogUrl;
-            $blog->save();
-            $this->blog = $blog;
+            $blog = Blog::create([
+                "name" => $this->blogName,
+                "slug" => $this->createSlug($this->blogName),
+                "domain" => $this->blog::$blogUrl
+            ]);
         }
+        $this->blog_id = $blog->id;
     }
 
     public function insertAuthorIfNotExist($authorName){
         $author = Author::where('slug' , $this->createSlug($authorName))->first();
         if(empty($author)){
-            $author = new Author;
-            $author->name = $authorName;
-            $author->slug = $this->createSlug($authorName);
-            $author->save();
-            $this->author = $author;
+            $author = Author::create([
+                "name" => $authorName,
+                "slug" => $this->createSlug($authorName)
+            ]);
         }
+        $this->author_id = $author->id;
     }
 
     public function insertTagsIfNotExist($tags){
@@ -67,10 +67,10 @@ trait Helpers{
         foreach($tags as $nodeTag){
             $tag = Tag::where('slug' , $this->createSlug($nodeTag))->first();
             if(empty($tag)){
-                $tag = new Tag;
-                $tag->name = $nodeTag;
-                $tag->slug = $this->createSlug($nodeTag);
-                $tag->save();
+                $tag = Tag::create([
+                    "name" => $nodeTag,
+                    "slug" => $this->createSlug($nodeTag)
+                ]);
             }
             $tags_ids []= $tag->id;
         }
@@ -80,9 +80,9 @@ trait Helpers{
 
     public function insertPost($data){
         $post = Post::create([
-            'author_id' => $this->author->id,
-            'blog_id' => $this->blog->id,
-            'category_id' => $this->category->id,
+            'author_id' => $this->author_id,
+            'blog_id' => $this->blog_id,
+            'category_id' => $this->category_id,
             'title' => $data['title'] ,
             'slug' => $this->createSlug($data['title']),
             'excerpt' => substr($data['content'], 0, 50),
