@@ -4,6 +4,11 @@
 This package will help you sync posts from popular blogs on the Internet.
 
 
+
+­
+![Logo](https://i0.wp.com/mihaisplace.blog/wp-content/uploads/2021/10/autoscraper.png?fit=512%2C341&ssl=1)
+
+
 ## Authors
 
 - [Abdelrahman Medhat](https://github.com/Abdelrahman-Medhat)
