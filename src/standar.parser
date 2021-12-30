@@ -4,13 +4,13 @@ namespace App\Parsers;
 
 class {@{Parser_Name}@} 
 {   
-    public static $websiteName = '';
+    public static $blogName = '';
 
-    public static $websiteUrl = '';
+    public static $blogUrl = '';
 
-    public static $websiteLogo = '';
+    public static $blogLogo = '';
 
-    public static $websiteQuery = '';
+    public static $blogQuery = '';
 
     public function posts($html){
         return '';
@@ -29,10 +29,6 @@ class {@{Parser_Name}@}
     }
 
     public function postCategory($node){
-        return '';
-    }
-
-    public function postExcerpt($node){
         return '';
     }
 

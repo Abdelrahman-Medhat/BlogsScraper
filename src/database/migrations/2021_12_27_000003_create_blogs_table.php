@@ -19,8 +19,6 @@ class CreateBlogsTable extends Migration
             $table->longText('slug');
             $table->longText('domain');
             $table->timestamps();
-
-            $table->index('slug');
         });
     }
 

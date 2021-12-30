@@ -4,13 +4,13 @@ namespace App\Parsers;
 
 class scitechdailyParser 
 {   
-    public static $websiteName = 'SciTechDaily';
+    public static $blogName = 'SciTechDaily';
 
-    public static $websiteUrl = 'https://scitechdaily.com';
+    public static $blogUrl = 'https://scitechdaily.com';
 
-    public static $websiteLogo = 'https://scitechdaily.com/images/cropped-scitechdaily-amp60.png';
+    public static $blogLogo = 'https://scitechdaily.com/images/cropped-scitechdaily-amp60.png';
 
-    public static $websiteQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
+    public static $blogQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
 
     public function posts($html){
         return $html->filter('.listing-item');
@@ -30,10 +30,6 @@ class scitechdailyParser
 
     public function postCategory($node){
         return $node->filter('.post-categories li a')->text();
-    }
-
-    public function postExcerpt($node){
-        return $node->filter('.post-excerpt p')->text();
     }
 
     public function postAuthor($post){

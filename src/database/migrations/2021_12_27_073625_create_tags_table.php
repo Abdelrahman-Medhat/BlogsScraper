@@ -18,8 +18,6 @@ class CreateTagsTable extends Migration
             $table->string('name');
             $table->longText('slug');
             $table->timestamps();
-
-            $table->index('slug');
         });
     }
 
