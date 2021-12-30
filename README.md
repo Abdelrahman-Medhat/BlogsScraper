@@ -69,7 +69,7 @@ php artisan create:parser blog-name
 
 **In this variable you need define blog name.**
 ```php
-public static $websiteName = 'SciTechDaily';
+public static $blogName = 'SciTechDaily';
 ```
 ­
 
@@ -78,7 +78,7 @@ public static $websiteName = 'SciTechDaily';
 
 **In this variable you need define home blog url.**
 ```php
-public static $websiteUrl = 'https://scitechdaily.com';
+public static $blogUrl = 'https://scitechdaily.com';
 ```
 ­
 
@@ -87,7 +87,7 @@ public static $websiteUrl = 'https://scitechdaily.com';
 
 **In this variable you need define blog logo.**
 ```php
-public static $websiteLogo = 'https://scitechdaily.com/images/cropped-scitechdaily-amp60.png';
+public static $blogLogo = 'https://scitechdaily.com/images/cropped-scitechdaily-amp60.png';
 ```
 
 ---
@@ -103,7 +103,7 @@ public static $websiteLogo = 'https://scitechdaily.com/images/cropped-scitechdai
 **After : `https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/`** 
 
 ```php
-    public static $websiteQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
+    public static $blogQuery = 'https://scitechdaily.com/news/{{tag}}/amp/page/{{page}}/';
 ```
 ­
 
@@ -199,8 +199,8 @@ public static $websiteLogo = 'https://scitechdaily.com/images/cropped-scitechdai
 
 **In this function you need to define post content .**
 
-we replace any `amp-img` with `img` in post content because website we scrape from it ,
-replace img tag with amp-img and if we use it with amp-img the image will not load on your website we need to change it 
+we replace any `amp-img` with `img` in post content because blog we scrape from it ,
+replace img tag with amp-img and if we use it with amp-img the image will not load on your blog we need to change it 
 to img tag to browser can load it .
 
 ```php
