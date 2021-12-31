@@ -269,6 +269,12 @@ to img tag to browser can load it .
 
 
 ## 4 ) Database Relationships
+­
+
+
+![Logo](https://i.ibb.co/9gZf7Bh/blogs-Scraper-DBdesign.png)
+­
+
 
 #### Get all posts with relationships.
 
